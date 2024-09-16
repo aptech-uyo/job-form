@@ -1,0 +1,52 @@
+{
+  "name": "job-form",
+  "version": "1.0.0",
+  "description": "Customized job application form built with Google Apps Script",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "rm -rf build && tsc && webpack",
+    "push": "npm run build && clasp push -f",
+    "deploy": "npm run push && clasp deploy",
+    "lint": "eslint .",
+    "format": "prettier . --write",
+    "login": "clasp login",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aptech-uyo/job-form.git"
+  },
+  "keywords": [
+    "apps-script",
+    "google"
+  ],
+  "author": "Aptech Computer Education, Uyo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aptech-uyo/job-form/issues"
+  },
+  "homepage": "https://github.com/aptech-uyo/job-form#readme",
+  "devDependencies": {
+    "@google/clasp": "^2.4.2",
+    "@types/google-apps-script": "^1.0.78",
+    "@typescript-eslint/eslint-plugin": "^6.14.0",
+    "@typescript-eslint/parser": "^6.14.0",
+    "copy-webpack-plugin": "^12.0.2",
+    "eslint": "^8.55.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-googleappsscript": "^1.0.5",
+    "eslint-plugin-prettier": "^5.2.1",
+    "gas-webpack-plugin": "^2.5.0",
+    "prettier": "^3.1.1",
+    "typescript": "^5.3.3",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4"
+  },
+  "engines": {
+    "node": ">=4",
+    "npm": ">=2"
+  },
+  "dependencies": {
+    "job-form": "file:"
+  }
+}
