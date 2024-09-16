@@ -4,7 +4,7 @@
   "description": "Customized job application form built with Google Apps Script",
   "main": "src/index.ts",
   "scripts": {
-    "build": "rm -rf build && tsc && webpack",
+    "build": "rm -rf build dist && tsc && webpack",
     "push": "npm run build && clasp push -f",
     "deploy": "npm run push && clasp deploy",
     "lint": "eslint .",

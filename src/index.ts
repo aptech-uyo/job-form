@@ -1,10 +1,15 @@
-function doGet(_e: GoogleAppsScript.Events.DoGet): GoogleAppsScript.HTML.HtmlOutput {
-  return HtmlService.createHtmlOutputFromFile("forms.html").setTitle(
+export function doGet(_e: GoogleAppsScript.Events.DoGet): GoogleAppsScript.HTML.HtmlOutput {
+  return HtmlService.createHtmlOutputFromFile("form.html").setTitle(
     "Graduate Management Trainee, Solution Tech Limited",
   )
 }
 
-function uploadFileToGoogleDrive(base64Data: string, fileName: string, name: string, email: string): string {
+export function uploadFileToGoogleDrive(
+  base64Data: string,
+  fileName: string,
+  name: string,
+  email: string,
+): string {
   try {
     const dropbox = "Graduate Management Trainee (Sep 2024) [Resumes]"
     const folders = DriveApp.getFoldersByName(dropbox)
