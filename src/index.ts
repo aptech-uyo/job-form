@@ -1,7 +1,10 @@
 export function doGet(_e: GoogleAppsScript.Events.DoGet): GoogleAppsScript.HTML.HtmlOutput {
-  return HtmlService.createHtmlOutputFromFile("form.html").setTitle(
-    "Graduate Management Trainee, Solution Tech Limited",
-  )
+  // form.html
+  return HtmlService.createTemplateFromFile("form").evaluate()
+}
+
+export function include(fileName: string): string {
+  return HtmlService.createHtmlOutputFromFile(fileName).getContent()
 }
 
 export function uploadFileToGoogleDrive(
