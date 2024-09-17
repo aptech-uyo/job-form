@@ -2,6 +2,7 @@
   "proseWrap": "always",
   "printWidth": 110,
   "bracketSpacing": true,
+  "bracketSameLine": true,
   "semi": false,
   "endOfLine": "auto"
 }

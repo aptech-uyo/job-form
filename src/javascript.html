@@ -1,0 +1,87 @@
+<script>
+  var file,
+    reader = new FileReader()
+
+  reader.onloadend = function (e) {
+    if (e.target.error != null) {
+      showError("File " + file.name + " could not be read.")
+      return
+    } else {
+      google.script.run
+        .withSuccessHandler(showSuccess)
+        .uploadFileToGoogleDrive(e.target.result, file.name, $("input#name").val(), $("input#email").val())
+    }
+  }
+
+  function showSuccess(e) {
+    if (e === "OK") {
+      $("#forminner").hide()
+      $("#success").show()
+    } else {
+      showError(e)
+    }
+  }
+
+  function toggleFormBody() {
+    $("#form-introduction").toggleClass("d-none")
+    $("#form-body").toggleClass("d-none")
+    $("#form-actions-container").toggleClass("justify-content-end").toggleClass("justify-content-between")
+    $("#form-prev-button").toggleClass("d-none")
+    $("#form-next-button").toggleClass("d-none")
+    $("#form-submit-button").toggleClass("d-none")
+  }
+
+  $(document).ready(function () {
+    $("#form-submit-button").on("click", function (event) {
+      const form = $("#form")
+      const isValid = form.get(0).checkValidity()
+
+      if (!isValid) {
+        event.preventDefault()
+        event.stopPropagation()
+      }
+      form.find(":invalid").addClass("is-invalid")
+      if (isValid) submitForm()
+    })
+
+    $("#form")
+      .find(":invalid")
+      .one("input", function (event) {
+        $(`[name="${$(this).attr("name")}"]`).removeClass("is-invalid")
+      })
+  })
+
+  function submitForm() {}
+
+  /*
+  function submitForm() {
+    var files = $("#files")[0].files
+
+    if (files.length === 0) {
+      showError("Please select a file to upload")
+      return
+    }
+
+    file = files[0]
+
+    if (file.size > 1024 * 1024 * 5) {
+      showError(
+        "The file size should be < 5 MB. Please <a href='http://www.labnol.org/internet/file-upload-google-forms/29170/' target='_blank'>upgrade to premium</a> for receiving larger files in Google Drive",
+      )
+      return
+    }
+
+    showMessage("Uploading file..")
+
+    reader.readAsDataURL(file)
+  }
+
+  function showError(e) {
+    $("#progress").addClass("red-text").html(e)
+  }
+
+  function showMessage(e) {
+    $("#progress").removeClass("red-text").html(e)
+  }
+  */
+</script>
