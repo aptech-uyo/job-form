@@ -29,6 +29,7 @@
     $("#form-prev-button").toggleClass("d-none")
     $("#form-next-button").toggleClass("d-none")
     $("#form-submit-button").toggleClass("d-none")
+    $("#form-card").get(0).scrollIntoView()
   }
 
   $(document).ready(function () {
@@ -40,15 +41,14 @@
         event.preventDefault()
         event.stopPropagation()
       }
-      form.find(":invalid").addClass("is-invalid")
+      form
+        .find(":invalid")
+        .addClass("is-invalid")
+        .one("input", function (event) {
+          $(`[name="${$(this).attr("name")}"]`).removeClass("is-invalid")
+        })
       if (isValid) submitForm()
     })
-
-    $("#form")
-      .find(":invalid")
-      .one("input", function (event) {
-        $(`[name="${$(this).attr("name")}"]`).removeClass("is-invalid")
-      })
   })
 
   function submitForm() {}

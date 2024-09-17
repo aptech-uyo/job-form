@@ -20,9 +20,9 @@
 
         <div id="form-card" class="col col-md-9 col-lg-8 col-xl-6 p-5 m-3 card bg-body">
           <form id="form" novalidate="novalidate">
-            <h3 class="mb-5">Graduate Management Trainee, Solution Tech Limited</h3>
+            <h3>Graduate Management Trainee, Solution Tech Limited</h3>
 
-            <div id="form-introduction">
+            <div id="form-introduction" class="mt-5">
               <p>
                 <strong>Solution Tech Limited </strong>is a technology company that provides innovative
                 solutions to various industries. Our focus is on developing and implementing cutting-edge
@@ -88,7 +88,7 @@
               </p>
             </div>
 
-            <div id="form-body" class="d-none">
+            <div id="form-body" class="d-none mt-5">
               <div class="mb-3">
                 <h5>
                   Company Awareness<br />
@@ -113,7 +113,7 @@
                   <option value="internal">I know someone at the company</option>
                 </select>
               </div>
-              <div class="mb-3 form-group form-field-required">
+              <div class="mb-3 form-field-required">
                 <label class="form-label"
                   >Have you previously worked for Solution Tech Limited or any of our
                   partners/franchises?</label
@@ -131,7 +131,10 @@
                   <input class="form-check-input" type="radio" name="formHaveWorked" id="formHaveWorked2" />
                   <label class="form-check-label" for="formHaveWorked2"> No </label>
                 </div>
-                <div class="invalid-feedback">Please answer the question.</div>
+                <div>
+                  <input class="d-none" type="radio" name="formHaveWorked" value="" />
+                  <div class="invalid-feedback">Please answer the question.</div>
+                </div>
               </div>
               <div class="mb-3 form-field-required">
                 <label class="form-label">Where do you currently reside?</label>
@@ -182,6 +185,152 @@
                 </select>
                 <div class="invalid-feedback">Please answer the question.</div>
               </div>
+              <div class="mt-5 mb-3">
+                <h5>
+                  Personal Information<br />
+                  <small class="text-body-secondary">Let us know who you are.</small>
+                </h5>
+              </div>
+              <div class="mb-3 form-field-required">
+                <label for="formGivenName" class="form-label">Given name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="formGivenName"
+                  name="formGivenName"
+                  placeholder="John"
+                  required />
+                <div class="invalid-feedback">Please provide your name.</div>
+              </div>
+              <div class="mb-3">
+                <label for="formMiddleName" class="form-label">Middle name</label>
+                <input type="text" class="form-control" id="formMiddleName" name="formMiddleName" />
+              </div>
+              <div class="mb-3 form-field-required">
+                <label for="formFamilyName" class="form-label">Family name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="formFamilyName"
+                  name="formFamilyName"
+                  placeholder="Doe"
+                  required />
+                <div class="invalid-feedback">Please provide your name.</div>
+              </div>
+              <div class="mb-3 form-field-required">
+                <label for="formEmail" class="form-label">Email</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="formEmail"
+                  name="formEmail"
+                  placeholder="name@example.com"
+                  required />
+                <div class="invalid-feedback">Please provide a valid email.</div>
+              </div>
+              <div class="mb-3 form-field-required">
+                <label for="formPhoneNumber" class="form-label">Phone number</label>
+                <div class="input-group">
+                  <span class="input-group-text" id="formPhoneNumberPrefix">+234</span>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="formPhoneNumber"
+                    name="formPhoneNumber"
+                    placeholder="801 001 0001"
+                    pattern="0?\d{3}\s*\d{3}\s*\d{4}\s*"
+                    required />
+                  <div class="invalid-feedback">Please provide a valid phone number.</div>
+                </div>
+              </div>
+              <div class="mb-3 form-field-required">
+                <label for="formDob" class="form-label">Date of birth</label>
+                <input type="date" class="form-control" id="formDob" name="formDob" required />
+                <div class="invalid-feedback">Please provide a your date of birth.</div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Address</label>
+                <div id="form-address-input-group">
+                  <div class="form-floating">
+                    <input
+                      type="text"
+                      class="form-control border-0 shadow-none"
+                      id="formAddressLine1"
+                      name="formAddressLine1" />
+                    <label for="formAddressLine1">Line 1</label>
+                  </div>
+                  <div class="form-floating">
+                    <input
+                      type="text"
+                      class="form-control border-0 shadow-none"
+                      id="formAddressLine2"
+                      name="formAddressLine2" />
+                    <label for="formAddressLine2">Line 2</label>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-floating">
+                        <input
+                          type="text"
+                          class="form-control border-0 shadow-none"
+                          id="formCity"
+                          name="formCity" />
+                        <label for="formCity">City</label>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-floating">
+                        <select
+                          id="formState"
+                          name="formState"
+                          class="form-select border-0 shadow-none"
+                          required
+                          aria-label="State">
+                          <option selected disabled value="">Choose</option>
+                          <option value="abia">Abia</option>
+                          <option value="adamawa">Adamawa</option>
+                          <option value="akwa-ibom">Akwa Ibom</option>
+                          <option value="anambra">Anambra</option>
+                          <option value="bauchi">Bauchi</option>
+                          <option value="bayelsa">Bayelsa</option>
+                          <option value="benue">Benue</option>
+                          <option value="borno">Borno</option>
+                          <option value="cross-river">Cross River</option>
+                          <option value="delta">Delta</option>
+                          <option value="ebonyi">Ebonyi</option>
+                          <option value="edo">Edo</option>
+                          <option value="ekiti">Ekiti</option>
+                          <option value="enugu">Enugu</option>
+                          <option value="gombe">Gombe</option>
+                          <option value="imo">Imo</option>
+                          <option value="jigawa">Jigawa</option>
+                          <option value="kaduna">Kaduna</option>
+                          <option value="kano">Kano</option>
+                          <option value="katsina">Katsina</option>
+                          <option value="kebbi">Kebbi</option>
+                          <option value="kogi">Kogi</option>
+                          <option value="kwara">Kwara</option>
+                          <option value="lagos">Lagos</option>
+                          <option value="nasarawa">Nasarawa</option>
+                          <option value="niger">Niger</option>
+                          <option value="ogun">Ogun</option>
+                          <option value="ondo">Ondo</option>
+                          <option value="osun">Osun</option>
+                          <option value="oyo">Oyo</option>
+                          <option value="plateau">Plateau</option>
+                          <option value="rivers">Rivers</option>
+                          <option value="sokoto">Sokoto</option>
+                          <option value="taraba">Taraba</option>
+                          <option value="yobe">Yobe</option>
+                          <option value="zamfara">Zamfara</option>
+                          <option value="fct-abuja">F.C.T. (Abuja)</option>
+                        </select>
+                        <label for="formState">State</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </form>
         </div>
@@ -192,18 +341,20 @@
           <button
             id="form-prev-button"
             type="button"
-            class="btn btn-light text-primary d-none"
+            class="btn btn-light shadow-sm d-none"
             onclick="toggleFormBody();">
             Previous
           </button>
           <button
             id="form-next-button"
             type="button"
-            class="btn btn-light text-primary"
+            class="btn btn-light shadow-sm"
             onclick="toggleFormBody();">
             Next
           </button>
-          <button id="form-submit-button" type="submit" class="btn btn-primary d-none">Submit</button>
+          <button id="form-submit-button" type="submit" class="btn btn-primary shadow-sm d-none">
+            Submit
+          </button>
         </div>
       </div>
     </div>
