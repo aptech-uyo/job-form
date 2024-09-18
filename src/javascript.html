@@ -1,4 +1,28 @@
 <script>
+  // https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
+  const SEMANTIC_FILE_TYPES = {
+    document:
+      "application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/msword,application/vnd.oasis.opendocument.text,application/rtf"
+  }
+
+  function validateForm() {
+    const isValid = $("#form").get(0).checkValidity()
+
+    if (!isValid) {
+      event.preventDefault()
+      event.stopPropagation()
+      $("#form")
+        .find(":invalid")
+        .addClass("is-invalid")
+        .one("input", function (event) {
+          $(`[name="${$(this).attr("name")}"]`).removeClass("is-invalid")
+        })
+    }
+    if (isValid) submitForm()
+  }
+
+  function submitForm() {}
+  /*
   var file,
     reader = new FileReader()
 
@@ -21,6 +45,62 @@
       showError(e)
     }
   }
+    */
+
+  $(document).ready(function () {
+    $.validator.addMethod(
+      "eachFileLessThan10Mb",
+      function (value, element) {
+        if (this.optional(element)) return true
+
+        if ($(element).attr("type") === "file" && element.files && element.files.length)
+          for (const file of element.files) if (file.size > 1024 * 1024 * 10) return false
+
+        return true
+      },
+      "File exceeds the 10MB limit."
+    )
+    $.validator.addMethod(
+      "maxFiles",
+      function (value, element, param) {
+        return (
+          this.optional(element) ||
+          ($(element).attr("type") === "file" && element.files && element.files.length <= param)
+        )
+      },
+      $.validator.format("Uploads of up to {0} items are allowed.")
+    )
+
+    $("#form").validate({
+      onsubmit: false,
+      onfocusout: false,
+      onkeyup: false,
+      onclick: false,
+      errorPlacement: function (error, element) {}
+    })
+
+    $("#formResume").rules("add", {
+      accept: SEMANTIC_FILE_TYPES.document,
+      eachFileLessThan10Mb: true
+    })
+    $("#formResume")
+      .attr("accept", SEMANTIC_FILE_TYPES.document)
+      .on("change", function (event) {
+        $(this)
+          .get(0)
+          .setCustomValidity($(this).valid() ? "" : "Please upload a valid resume.")
+      })
+
+    $("#formAdditionalDocs").rules("add", {
+      maxFiles: 5,
+      eachFileLessThan10Mb: true
+    })
+    $("#formAdditionalDocs").on("change", function (event) {
+      $(this)
+        .get(0)
+        .setCustomValidity($(this).valid() ? "" : "Please ensure all your documents are valid.")
+    })
+  })
 
   function toggleFormBody() {
     $("#form-introduction").toggleClass("d-none")
@@ -31,27 +111,6 @@
     $("#form-submit-button").toggleClass("d-none")
     $("#form-card").get(0).scrollIntoView()
   }
-
-  $(document).ready(function () {
-    $("#form-submit-button").on("click", function (event) {
-      const form = $("#form")
-      const isValid = form.get(0).checkValidity()
-
-      if (!isValid) {
-        event.preventDefault()
-        event.stopPropagation()
-      }
-      form
-        .find(":invalid")
-        .addClass("is-invalid")
-        .one("input", function (event) {
-          $(`[name="${$(this).attr("name")}"]`).removeClass("is-invalid")
-        })
-      if (isValid) submitForm()
-    })
-  })
-
-  function submitForm() {}
 
   /*
   function submitForm() {

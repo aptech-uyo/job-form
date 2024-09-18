@@ -230,7 +230,7 @@
               </div>
               <div class="mb-3 form-field-required">
                 <label for="formPhoneNumber" class="form-label">Phone number</label>
-                <div class="input-group">
+                <div class="input-group has-validation">
                   <span class="input-group-text" id="formPhoneNumberPrefix">+234</span>
                   <input
                     type="text"
@@ -284,7 +284,6 @@
                           id="formState"
                           name="formState"
                           class="form-select border-0 shadow-none"
-                          required
                           aria-label="State">
                           <option selected disabled value="">Choose</option>
                           <option value="abia">Abia</option>
@@ -331,6 +330,55 @@
                   </div>
                 </div>
               </div>
+              <div class="mt-5 mb-3">
+                <h5>
+                  Application Details<br />
+                  <small class="text-body-secondary"
+                    >Please provide your resume and an optional cover letter.</small
+                  >
+                </h5>
+              </div>
+              <div class="mb-3 form-field-required">
+                <label for="formResume" class="form-label">Resume/CV</label>
+                <input
+                  type="file"
+                  class="form-control"
+                  id="formResume"
+                  name="formResume"
+                  required
+                  aria-describedby="form-resume-help" />
+                <div class="form-text" id="form-resume-help">
+                  Upload 1 supported file: PDF or document. Max 10 MB.
+                </div>
+                <div class="invalid-feedback">Please upload a valid resume.</div>
+              </div>
+              <div class="mb-3">
+                <label for="formAdditionalDocs" class="form-label">Additional documents</label>
+                <input
+                  type="file"
+                  class="form-control"
+                  id="formAdditionalDocs"
+                  name="formAdditionalDocs"
+                  multiple
+                  aria-describedby="form-additional-docs-help" />
+                <div class="form-text" id="form-additional-docs-help">
+                  Upload up to 5 files. Max 10 MB per file.<br />
+                  Please only upload documents that are relevant to your professional or academic experience
+                  under this section. Examples of such documents include your inter alia certificates,
+                  certifications and awards. <strong>Do not </strong>upload documents such as IDs and passport
+                  copies which do not relate to your experience and are irrelevant to the position being
+                  applied for.
+                </div>
+                <div class="invalid-feedback">Please ensure all your documents are valid.</div>
+              </div>
+              <div class="mb-3">
+                <label for="formCoverLetter" class="form-label">Cover letter (optional)</label>
+                <textarea
+                  class="form-control"
+                  id="formCoverLetter"
+                  name="formCoverLetter"
+                  rows="3"></textarea>
+              </div>
             </div>
           </form>
         </div>
@@ -352,7 +400,12 @@
             onclick="toggleFormBody();">
             Next
           </button>
-          <button id="form-submit-button" type="submit" class="btn btn-primary shadow-sm d-none">
+          <button
+            id="form-submit-button"
+            form="form"
+            type="submit"
+            class="btn btn-primary shadow-sm d-none"
+            onclick="validateForm(); return false;">
             Submit
           </button>
         </div>
@@ -440,6 +493,8 @@
     </div -->
 
     <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.js"></script>
 
     <!-- javascript.html -->
     <?!= include('javascript'); ?>
