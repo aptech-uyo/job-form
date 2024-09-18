@@ -21,10 +21,77 @@
     if (isValid) submitForm()
   }
 
-  function submitForm() {}
+  async function submitForm() {
+    const formData = {
+      hearAbout: $("[name=formHearAbout]").val(),
+      haveWorked: $("[name=formHaveWorked]:checked").val() === "yes",
+      whereReside: $("[name=formWhereReside]").val(),
+      givenName: $("[name=formGivenName]").val().trim(),
+      middleName: $("[name=formMiddleName]").val().trim(),
+      familyName: $("[name=formFamilyName]").val().trim(),
+      email: $("[name=formEmail]").val().trim(),
+      phoneNumber: $("[name=formPhoneNumber]").val().replace(/\s/g, ""),
+      dob: $("[name=formDob]").val(),
+      addressLine1: $("[name=formAddressLine1]").val().trim(),
+      addressLine2: $("[name=formAddressLine2]").val().trim(),
+      addressCity: $("[name=formCity]").val().trim(),
+      addressState: $("[name=formState]").val(),
+      coverLetter: $("[name=formCoverLetter]").val(),
+      conflictingInterests: $("[name=formConflictingInterests]:checked").val() === "yes",
+      employedRelatives: $("[name=formEmployedRelatives]:checked").val() === "yes",
+      canRelocate: $("[name=formCanRelocate]:checked").val() === "yes",
+      highestEducation: $("[name=formHighestEducation]").val(),
+      whyGood: $("[name=formWhyGood]").val()
+    }
+    if (formData.phoneNumber.length == 10) formData.phoneNumber = "0" + formData.phoneNumber
+
+    const resume = $("#formResume")[0].files[0] // resume
+    const additionalDocs = $("#formAdditionalDocs")[0].files // additional docs
+
+    disableSubmitButton()
+
+    try {
+      formData.resume = await readFile(resume)
+      formData.additionalDocs = await Promise.all(Array.from(additionalDocs).map((doc) => readFile(doc)))
+    } catch (error) {
+      console.error(error)
+      bootstrap.Toast.getOrCreateInstance($("#fileReadError")[0]).show()
+      reinstateSubmitButton()
+      return
+    }
+
+    console.log(formData)
+  }
+
+  async function readFile(file) {
+    const reader = new FileReader()
+    return new Promise((resolve, reject) => {
+      reader.onerror = (event) => reject(event.target.error)
+      reader.onload = (event) => resolve(event.target.result)
+      reader.readAsDataURL(file)
+    })
+  }
+
+  function disableSubmitButton() {
+    const submitButton = $("#form-submit-button")
+    submitButton.attr("disabled", function (_, attr) {
+      return !attr
+    })
+    submitButton.html(
+      `<span class="spinner-grow spinner-grow-sm" aria-hidden="true"></span>
+      <span role="status">Uploading files...</span>`
+    )
+  }
+
+  function reinstateSubmitButton() {
+    const submitButton = $("#form-submit-button")
+    submitButton.text("Submit")
+    submitButton.attr("disabled", function (_, attr) {
+      return !attr
+    })
+  }
+
   /*
-  var file,
-    reader = new FileReader()
 
   reader.onloadend = function (e) {
     if (e.target.error != null) {
@@ -113,28 +180,6 @@
   }
 
   /*
-  function submitForm() {
-    var files = $("#files")[0].files
-
-    if (files.length === 0) {
-      showError("Please select a file to upload")
-      return
-    }
-
-    file = files[0]
-
-    if (file.size > 1024 * 1024 * 5) {
-      showError(
-        "The file size should be < 5 MB. Please <a href='http://www.labnol.org/internet/file-upload-google-forms/29170/' target='_blank'>upgrade to premium</a> for receiving larger files in Google Drive",
-      )
-      return
-    }
-
-    showMessage("Uploading file..")
-
-    reader.readAsDataURL(file)
-  }
-
   function showError(e) {
     $("#progress").addClass("red-text").html(e)
   }
