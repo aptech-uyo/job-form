@@ -17,11 +17,27 @@
         .one("input", function (event) {
           $(`[name="${$(this).attr("name")}"]`).removeClass("is-invalid")
         })
+
+      // take the user to the invalid element
+      $("#form").find(":invalid").get(0).scrollIntoView()
     }
     if (isValid) submitForm()
   }
 
   async function submitForm() {
+    disableSubmitButton()
+    const formData = await prepareFormData()
+    if (formData == null) return
+
+    $("#form-submit-button").html(`<span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+      <span role="status">Uploading files...</span>`)
+    google.script.run
+      .withSuccessHandler(onFormSubmissionSuccess)
+      .withFailureHandler(onFormSubmissionFailure)
+      .registerSubmission(formData)
+  }
+
+  async function prepareFormData() {
     const formData = {
       hearAbout: $("[name=formHearAbout]").val(),
       haveWorked: $("[name=formHaveWorked]:checked").val() === "yes",
@@ -48,19 +64,18 @@
     const resume = $("#formResume")[0].files[0] // resume
     const additionalDocs = $("#formAdditionalDocs")[0].files // additional docs
 
-    disableSubmitButton()
-
     try {
       formData.resume = await readFile(resume)
       formData.additionalDocs = await Promise.all(Array.from(additionalDocs).map((doc) => readFile(doc)))
     } catch (error) {
       console.error(error)
-      bootstrap.Toast.getOrCreateInstance($("#fileReadError")[0]).show()
+      bootstrap.Toast.getOrCreateInstance($("#file-read-error")[0]).show()
       reinstateSubmitButton()
-      return
+      return null
     }
 
     console.log(formData)
+    return formData
   }
 
   async function readFile(file) {
@@ -77,10 +92,8 @@
     submitButton.attr("disabled", function (_, attr) {
       return !attr
     })
-    submitButton.html(
-      `<span class="spinner-grow spinner-grow-sm" aria-hidden="true"></span>
-      <span role="status">Uploading files...</span>`
-    )
+    submitButton.html(`<span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+      <span role="status">Checking files...</span>`)
   }
 
   function reinstateSubmitButton() {
@@ -91,18 +104,20 @@
     })
   }
 
-  /*
-
-  reader.onloadend = function (e) {
-    if (e.target.error != null) {
-      showError("File " + file.name + " could not be read.")
-      return
-    } else {
-      google.script.run
-        .withSuccessHandler(showSuccess)
-        .uploadFileToGoogleDrive(e.target.result, file.name, $("input#name").val(), $("input#email").val())
-    }
+  function onFormSubmissionSuccess(returnValue) {
+    if (returnValue) {
+      bootstrap.Toast.getOrCreateInstance($("#submission-success")[0]).show()
+      reinstateSubmitButton() // TODO: show success page
+    } else onFormSubmissionFailure(new Error("An unknown failure occured"))
   }
+
+  function onFormSubmissionFailure(error) {
+    console.error(error)
+    bootstrap.Toast.getOrCreateInstance($("#submission-failure")[0]).show()
+    reinstateSubmitButton()
+  }
+
+  /*
 
   function showSuccess(e) {
     if (e === "OK") {
@@ -178,14 +193,4 @@
     $("#form-submit-button").toggleClass("d-none")
     $("#form-card").get(0).scrollIntoView()
   }
-
-  /*
-  function showError(e) {
-    $("#progress").addClass("red-text").html(e)
-  }
-
-  function showMessage(e) {
-    $("#progress").removeClass("red-text").html(e)
-  }
-  */
 </script>

@@ -1,11 +1,13 @@
+const webpack = require("webpack")
 const GasPlugin = require("gas-webpack-plugin")
 const CopyWebpackPlugin = require("copy-webpack-plugin")
+const Dotenv = require("dotenv-webpack")
 const path = require("path")
 
 const entry = "./build/index.js"
 const output = {
   path: path.resolve(__dirname, "dist"),
-  filename: "Code.js",
+  filename: "Code.js"
 }
 
 module.exports = {
@@ -16,14 +18,15 @@ module.exports = {
   output,
   plugins: [
     new GasPlugin({
-      autoGlobalExportsFiles: [entry],
+      autoGlobalExportsFiles: [entry]
     }),
     new CopyWebpackPlugin({
       patterns: [
         { from: path.resolve(__dirname, "appsscript.json") },
-        { from: "src/*.html", to: "[name][ext]" },
-      ],
+        { from: "src/*.html", to: "[name][ext]" }
+      ]
     }),
+    new Dotenv()
   ],
-  devtool: false,
+  devtool: false
 }
