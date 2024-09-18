@@ -10,5 +10,6 @@
       "fileMatch": [".clasp.json"],
       "url": "https://json.schemastore.org/clasp.json"
     }
-  ]
+  ],
+  "autoimport.doubleQuotes": true
 }

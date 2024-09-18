@@ -22,8 +22,22 @@ export interface FormData {
   whyGood: string
 }
 
-export interface FileData {
+export interface FormFiles {
+  resume: GoogleAppsScript.Drive.File
+  docs: GoogleAppsScript.Drive.File[]
+  coverLetter?: GoogleAppsScript.Drive.File
+  shortWriting: GoogleAppsScript.Drive.File
+}
+
+export type FileData = FileBlob | FileContent
+
+export interface FileBlob {
+  name: string
   data: GoogleAppsScript.Byte[]
   contentType: string
+}
+
+export interface FileContent {
   name: string
+  content: string
 }
