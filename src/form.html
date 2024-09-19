@@ -4,14 +4,21 @@
     <base target="_blank" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Job Application for Graduate Management Trainee, Solution Tech Limited</title>
+
+    <!-- color-mode.html -->
+    <?!= include('color-mode'); ?>
+
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.css" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
 
     <!-- styles.html -->
     <?!= include('styles'); ?>
   </head>
-  <body>
-    <div id="content-root" class="container-fluid">
+  <body class="p-0 pb-5 m-0">
+    <div id="content-root" class="container-fluid m-0">
       <div id="centered-content-container" class="pt-5 row d-flex justify-content-center">
         <div id="logo-container" class="col col-md-9 col-lg-8 col-xl-6"></div>
 
@@ -19,10 +26,19 @@
         <div class="w-100 d-block"></div>
 
         <div id="form-card" class="col col-md-9 col-lg-8 col-xl-6 p-5 m-3 card bg-body">
-          <form id="form" novalidate="novalidate">
-            <h3 class="mb-5">Graduate Management Trainee, Solution Tech Limited</h3>
+          <form id="form" novalidate="novalidate" autocomplete="on">
+            <div
+              id="form-heading"
+              class="d-flex flex-column flex-md-row align-items-start align-items-md-center">
+              <img
+                id="company-logo"
+                class="w-auto"
+                src="data:image/png;base64,<?= getLogoBase64() ?>"
+                alt="Solution Tech logo" />
+              <h3 class="ms-1">Graduate Management Trainee, Solution Tech Limited</h3>
+            </div>
 
-            <div id="form-introduction">
+            <div id="form-introduction" class="mt-5">
               <p>
                 <strong>Solution Tech Limited </strong>is a technology company that provides innovative
                 solutions to various industries. Our focus is on developing and implementing cutting-edge
@@ -88,7 +104,7 @@
               </p>
             </div>
 
-            <div id="form-body" class="d-none">
+            <div id="form-body" class="d-none mt-5">
               <div class="mb-3">
                 <h5>
                   Company Awareness<br />
@@ -113,7 +129,7 @@
                   <option value="internal">I know someone at the company</option>
                 </select>
               </div>
-              <div class="mb-3 form-group form-field-required">
+              <div class="mb-3 form-field-required">
                 <label class="form-label"
                   >Have you previously worked for Solution Tech Limited or any of our
                   partners/franchises?</label
@@ -124,17 +140,26 @@
                     type="radio"
                     name="formHaveWorked"
                     id="formHaveWorked1"
+                    value="yes"
                     required />
-                  <label class="form-check-label" for="formHaveWorked1"> Yes </label>
+                  <label class="form-check-label" for="formHaveWorked1">Yes</label>
                 </div>
                 <div class="form-check">
-                  <input class="form-check-input" type="radio" name="formHaveWorked" id="formHaveWorked2" />
-                  <label class="form-check-label" for="formHaveWorked2"> No </label>
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="formHaveWorked"
+                    id="formHaveWorked2"
+                    value="no" />
+                  <label class="form-check-label" for="formHaveWorked2">No</label>
                 </div>
-                <div class="invalid-feedback">Please answer the question.</div>
+                <div>
+                  <input class="d-none" type="radio" name="formHaveWorked" value="" />
+                  <div class="invalid-feedback">Please answer the question.</div>
+                </div>
               </div>
               <div class="mb-3 form-field-required">
-                <label class="form-label">Where do you currently reside?</label>
+                <label for="formWhereReside" class="form-label">Where do you currently reside?</label>
                 <select
                   id="formWhereReside"
                   name="formWhereReside"
@@ -182,100 +207,423 @@
                 </select>
                 <div class="invalid-feedback">Please answer the question.</div>
               </div>
+              <div class="mt-5 mb-3">
+                <h5>
+                  Personal Information<br />
+                  <small class="text-body-secondary">Let us know who you are.</small>
+                </h5>
+              </div>
+              <div class="mb-3 form-field-required">
+                <label for="formGivenName" class="form-label">Given name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="formGivenName"
+                  name="formGivenName"
+                  placeholder="John"
+                  required />
+                <div class="invalid-feedback">Please provide your name.</div>
+              </div>
+              <div class="mb-3">
+                <label for="formMiddleName" class="form-label">Middle name</label>
+                <input type="text" class="form-control" id="formMiddleName" name="formMiddleName" />
+              </div>
+              <div class="mb-3 form-field-required">
+                <label for="formFamilyName" class="form-label">Family name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="formFamilyName"
+                  name="formFamilyName"
+                  placeholder="Doe"
+                  required />
+                <div class="invalid-feedback">Please provide your name.</div>
+              </div>
+              <div class="mb-3 form-field-required">
+                <label for="formEmail" class="form-label">Email</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="formEmail"
+                  name="formEmail"
+                  placeholder="name@example.com"
+                  required />
+                <div class="invalid-feedback">Please provide a valid email.</div>
+              </div>
+              <div class="mb-3 form-field-required">
+                <label for="formPhoneNumber" class="form-label">Phone number</label>
+                <div class="input-group has-validation">
+                  <span class="input-group-text" id="formPhoneNumberPrefix">+234</span>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="formPhoneNumber"
+                    name="formPhoneNumber"
+                    placeholder="801 001 0001"
+                    pattern="0?\d{3}\s*\d{3}\s*\d{4}\s*"
+                    required />
+                  <div class="invalid-feedback">Please provide a valid phone number.</div>
+                </div>
+              </div>
+              <div class="mb-3 form-field-required">
+                <label for="formDob" class="form-label">Date of birth</label>
+                <input type="date" class="form-control" id="formDob" name="formDob" required />
+                <div class="invalid-feedback">Please provide your date of birth.</div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Address</label>
+                <div id="form-address-input-group">
+                  <div class="form-floating">
+                    <input
+                      type="text"
+                      class="form-control border-0 shadow-none"
+                      id="formAddressLine1"
+                      name="formAddressLine1" />
+                    <label for="formAddressLine1">Line 1</label>
+                  </div>
+                  <div class="form-floating">
+                    <input
+                      type="text"
+                      class="form-control border-0 shadow-none"
+                      id="formAddressLine2"
+                      name="formAddressLine2" />
+                    <label for="formAddressLine2">Line 2</label>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-floating">
+                        <input
+                          type="text"
+                          class="form-control border-0 shadow-none"
+                          id="formCity"
+                          name="formCity" />
+                        <label for="formCity">City</label>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-floating">
+                        <select
+                          id="formState"
+                          name="formState"
+                          class="form-select border-0 shadow-none"
+                          aria-label="State">
+                          <option selected disabled value="">Choose</option>
+                          <option value="abia">Abia</option>
+                          <option value="adamawa">Adamawa</option>
+                          <option value="akwa-ibom">Akwa Ibom</option>
+                          <option value="anambra">Anambra</option>
+                          <option value="bauchi">Bauchi</option>
+                          <option value="bayelsa">Bayelsa</option>
+                          <option value="benue">Benue</option>
+                          <option value="borno">Borno</option>
+                          <option value="cross-river">Cross River</option>
+                          <option value="delta">Delta</option>
+                          <option value="ebonyi">Ebonyi</option>
+                          <option value="edo">Edo</option>
+                          <option value="ekiti">Ekiti</option>
+                          <option value="enugu">Enugu</option>
+                          <option value="gombe">Gombe</option>
+                          <option value="imo">Imo</option>
+                          <option value="jigawa">Jigawa</option>
+                          <option value="kaduna">Kaduna</option>
+                          <option value="kano">Kano</option>
+                          <option value="katsina">Katsina</option>
+                          <option value="kebbi">Kebbi</option>
+                          <option value="kogi">Kogi</option>
+                          <option value="kwara">Kwara</option>
+                          <option value="lagos">Lagos</option>
+                          <option value="nasarawa">Nasarawa</option>
+                          <option value="niger">Niger</option>
+                          <option value="ogun">Ogun</option>
+                          <option value="ondo">Ondo</option>
+                          <option value="osun">Osun</option>
+                          <option value="oyo">Oyo</option>
+                          <option value="plateau">Plateau</option>
+                          <option value="rivers">Rivers</option>
+                          <option value="sokoto">Sokoto</option>
+                          <option value="taraba">Taraba</option>
+                          <option value="yobe">Yobe</option>
+                          <option value="zamfara">Zamfara</option>
+                          <option value="fct-abuja">F.C.T. (Abuja)</option>
+                        </select>
+                        <label for="formState">State</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-5 mb-3">
+                <h5>
+                  Application Details<br />
+                  <small class="text-body-secondary"
+                    >Please provide your resume and an optional cover letter.</small
+                  >
+                </h5>
+              </div>
+              <div class="mb-3 form-field-required">
+                <label for="formResume" class="form-label">Resume/CV</label>
+                <input
+                  type="file"
+                  class="form-control"
+                  id="formResume"
+                  name="formResume"
+                  required
+                  aria-describedby="form-resume-help" />
+                <div class="form-text" id="form-resume-help">
+                  Upload 1 supported file: PDF or document. Max 10 MB.
+                </div>
+                <div class="invalid-feedback">Please upload a valid resume.</div>
+              </div>
+              <div class="mb-3">
+                <label for="formAdditionalDocs" class="form-label">Additional documents</label>
+                <input
+                  type="file"
+                  class="form-control"
+                  id="formAdditionalDocs"
+                  name="formAdditionalDocs"
+                  multiple
+                  aria-describedby="form-additional-docs-help" />
+                <div class="form-text" id="form-additional-docs-help">
+                  Upload up to 5 files. Max 10 MB per file.<br />
+                  Please only upload documents that are relevant to your professional or academic experience
+                  under this section. Examples of such documents include your inter alia certificates,
+                  certifications and awards. <strong>Do not </strong>upload documents such as IDs and passport
+                  copies which do not relate to your experience and are irrelevant to the position being
+                  applied for.
+                </div>
+                <div class="invalid-feedback">Please ensure all your documents are valid.</div>
+              </div>
+              <div class="mb-3">
+                <label for="formCoverLetter" class="form-label">Cover letter (optional)</label>
+                <textarea
+                  class="form-control"
+                  id="formCoverLetter"
+                  name="formCoverLetter"
+                  rows="3"></textarea>
+              </div>
+              <div class="mt-5 mb-3">
+                <h5>
+                  Questions<br />
+                  <small class="text-body-secondary">Please answer one last round of quick questions.</small>
+                </h5>
+              </div>
+              <div class="mb-3 form-field-required">
+                <label class="form-label"
+                  >Do you have any business or side jobs conflicting with the full-time position you are
+                  applying for?</label
+                >
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="formConflictingInterests"
+                    id="formConflictingInterests1"
+                    value="yes"
+                    required />
+                  <label class="form-check-label" for="formConflictingInterests1">Yes</label>
+                </div>
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="formConflictingInterests"
+                    id="formConflictingInterests2"
+                    value="no" />
+                  <label class="form-check-label" for="formConflictingInterests2">No</label>
+                </div>
+                <div>
+                  <input class="d-none" type="radio" name="formConflictingInterests" value="" />
+                  <div class="invalid-feedback">Please answer the question.</div>
+                </div>
+              </div>
+              <div class="mb-3 form-field-required">
+                <label class="form-label"
+                  >Do you have any relatives currently employed by Solution Tech Limited or any of our
+                  partners/franchises?</label
+                >
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="formEmployedRelatives"
+                    id="formEmployedRelatives1"
+                    value="yes"
+                    required />
+                  <label class="form-check-label" for="formEmployedRelatives1">Yes</label>
+                </div>
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="formEmployedRelatives"
+                    id="formEmployedRelatives2"
+                    value="no" />
+                  <label class="form-check-label" for="formEmployedRelatives2">No</label>
+                </div>
+                <div>
+                  <input class="d-none" type="radio" name="formEmployedRelatives" value="" />
+                  <div class="invalid-feedback">Please answer the question.</div>
+                </div>
+              </div>
+              <div class="mb-3 form-field-required">
+                <label class="form-label">Are you willing to relocate to Lagos or Uyo if need be?</label>
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="formCanRelocate"
+                    id="formCanRelocate1"
+                    value="yes"
+                    required />
+                  <label class="form-check-label" for="formCanRelocate1">Yes</label>
+                </div>
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="formCanRelocate"
+                    id="formCanRelocate2"
+                    value="no" />
+                  <label class="form-check-label" for="formCanRelocate2">No</label>
+                </div>
+                <div>
+                  <input class="d-none" type="radio" name="formCanRelocate" value="" />
+                  <div class="invalid-feedback">Please answer the question.</div>
+                </div>
+              </div>
+              <div class="mb-3 form-field-required">
+                <label for="formHighestEducation" class="form-label"
+                  >What is your highest level of education?
+                </label>
+                <select
+                  id="formHighestEducation"
+                  name="formHighestEducation"
+                  class="form-select"
+                  required
+                  aria-label="What is your highest level of education?">
+                  <option selected disabled value="">Choose</option>
+                  <option value="phd">PhD</option>
+                  <option value="masters">Masters</option>
+                  <option value="bachelors">Bachelor's degree</option>
+                  <option value="diploma">Diploma</option>
+                  <option value="cert">Certificate</option>
+                  <option value="ssc">Secondary school</option>
+                  <option value="other">Other</option>
+                </select>
+                <div class="invalid-feedback">Please answer the question.</div>
+              </div>
+              <div class="mb-3 form-field-required">
+                <label for="formWhyGood" class="form-label"
+                  >Explain in less than 100 words why you may be a good fit for this role.</label
+                >
+                <textarea
+                  class="form-control"
+                  id="formWhyGood"
+                  name="formWhyGood"
+                  maxlength="650"
+                  required
+                  rows="3"></textarea>
+                <div class="invalid-feedback">Please answer the question.</div>
+              </div>
+            </div>
+
+            <div id="form-success" class="d-none mt-5">
+              <p>Thank you for your interest.</p>
+              <p>We will reach out to you if you are shortlisted for the next stage of the hiring process.</p>
             </div>
           </form>
         </div>
 
         <div class="w-100 d-block"></div>
 
-        <div id="form-actions-container" class="col col-md-9 col-lg-8 col-xl-6 d-flex justify-content-end">
+        <div
+          id="form-actions-container"
+          class="col col-md-9 col-lg-8 col-xl-6 mb-5 d-flex justify-content-end">
           <button
             id="form-prev-button"
             type="button"
-            class="btn btn-light text-primary d-none"
+            class="btn btn-light btn-lg text-primary-emphasis fw-normal shadow-sm d-none"
             onclick="toggleFormBody();">
             Previous
           </button>
           <button
             id="form-next-button"
             type="button"
-            class="btn btn-light text-primary"
+            class="btn btn-light btn-lg text-primary-emphasis fw-normal shadow-sm"
             onclick="toggleFormBody();">
             Next
           </button>
-          <button id="form-submit-button" type="submit" class="btn btn-primary d-none">Submit</button>
+          <button
+            id="form-submit-button"
+            form="form"
+            type="submit"
+            class="btn btn-primary btn-lg fw-normal shadow-sm d-none"
+            onclick="validateForm(); return false;">
+            Submit
+          </button>
         </div>
       </div>
     </div>
 
-    <form class="main" id="form" novalidate="novalidate" style="max-width: 480px; margin: 40px auto">
-      <div id="forminner">
-        <div class="row">
-          <div class="col s12">
-            <h5 class="center-align teal-text">Upload Files to my Google Drive</h5>
-            <p class="disclaimer">
-              This
-              <a href="http://www.labnol.org/internet/file-upload-google-forms/29170/">File Upload Form</a>
-              (<a href="https://youtu.be/C_YBBupebvE">tutorial</a>) is powered by
-              <a href="https://ctrlq.org/code/19747-google-forms-upload-files" target="_blank"
-                >Google Scripts</a
-              >
-            </p>
-          </div>
-        </div>
-        <div class="row">
-          <div class="input-field col s12">
-            <input id="name" type="text" name="Name" class="validate" required="" aria-required="true" />
-            <label for="name">Name</label>
-          </div>
-        </div>
-        <div class="row">
-          <div class="input-field col s12">
-            <input id="email" type="email" name="Email" class="validate" required="" aria-required="true" />
-            <label for="email">Email Address</label>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="file-field input-field col s12">
-            <div class="btn">
-              <span>File</span>
-              <input id="files" type="file" />
-            </div>
-            <div class="file-path-wrapper">
-              <input class="file-path validate" type="text" placeholder="Select a file on your computer" />
-            </div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="input-field col s6">
-            <button
-              class="waves-effect waves-light btn submit-btn"
-              type="submit"
-              onclick="submitForm(); return false;">
-              Submit
-            </button>
-          </div>
-        </div>
-        <div class="row">
-          <div class="input-field col s12" id="progress"></div>
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+      <div
+        id="file-read-error"
+        class="toast align-items-center text-bg-danger border-0"
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true">
+        <div class="d-flex">
+          <div class="toast-body">Could not process one or more files</div>
+          <button
+            type="button"
+            class="btn-close btn-close-white me-2 m-auto"
+            data-bs-dismiss="toast"
+            aria-label="Close"></button>
         </div>
       </div>
-      <div id="success" style="display: none">
-        <h5 class="left-align teal-text">File Uploaded</h5>
-        <p>Your file has been successfully uploaded.</p>
-        <p>
-          The <a href="http://www.labnol.org/internet/file-upload-google-forms/29170/">pro version</a> (see
-          <a href="http://j.mp/GoogleFormsDemo">demo form</a>) includes a visual drag-n-drop form builder,
-          CAPTCHAs, the form responses are saved in a Google Spreadsheet and respondents can upload multiple
-          files of any size.
-        </p>
-        <p class="center-align">
-          <a class="btn btn-large" href="https://gum.co/GA14?wanted=true" target="_blank">Upgrade to Pro</a>
-        </p>
+      <div
+        id="submission-failure"
+        class="toast align-items-center text-bg-danger border-0"
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true">
+        <div class="d-flex">
+          <div class="toast-body">We encountered a problem, we're working on it</div>
+          <button
+            type="button"
+            class="btn-close btn-close-white me-2 m-auto"
+            data-bs-dismiss="toast"
+            aria-label="Close"></button>
+        </div>
       </div>
-    </form>
+      <div
+        id="submission-success"
+        class="toast align-items-center text-bg-success border-0"
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true">
+        <div class="d-flex">
+          <div class="toast-body">Application submitted successfully</div>
+          <button
+            type="button"
+            class="btn-close btn-close-white me-2 m-auto"
+            data-bs-dismiss="toast"
+            aria-label="Close"></button>
+        </div>
+      </div>
+    </div>
+
+    <div id="bd-theme-container" class="position-fixed bottom-0 m-4 p-0" style="right: 0px">
+      <button
+        id="bd-theme"
+        type="button"
+        class="btn btn-primary rounded-circle btn-lg"
+        data-bs-theme-value="light"
+        aria-label="Switch theme (light)">
+        <i class="bi bi-sun-fill theme-icon-active fs-3"></i>
+        <span id="bd-theme-text" class="d-none visually-hidden">Switch theme</span>
+      </button>
+    </div>
 
     <!-- div class="fixed-action-btn horizontal" style="bottom: 45px; right: 24px;">
       <a class="btn-floating btn-large red">
@@ -289,6 +637,9 @@
     </div -->
 
     <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.js"></script>
 
     <!-- javascript.html -->
     <?!= include('javascript'); ?>

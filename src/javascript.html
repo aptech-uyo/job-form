@@ -1,26 +1,176 @@
 <script>
-  var file,
-    reader = new FileReader()
-
-  reader.onloadend = function (e) {
-    if (e.target.error != null) {
-      showError("File " + file.name + " could not be read.")
-      return
-    } else {
-      google.script.run
-        .withSuccessHandler(showSuccess)
-        .uploadFileToGoogleDrive(e.target.result, file.name, $("input#name").val(), $("input#email").val())
-    }
+  // https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
+  const SEMANTIC_FILE_TYPES = {
+    document:
+      "application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/msword,application/vnd.oasis.opendocument.text,application/rtf"
   }
 
-  function showSuccess(e) {
-    if (e === "OK") {
-      $("#forminner").hide()
-      $("#success").show()
-    } else {
-      showError(e)
+  function validateForm() {
+    const isValid = $("#form").get(0).checkValidity()
+
+    if (!isValid) {
+      event.preventDefault()
+      event.stopPropagation()
+      $("#form")
+        .find(":invalid")
+        .addClass("is-invalid")
+        .one("input", function (event) {
+          $(`[name="${$(this).attr("name")}"]`).removeClass("is-invalid")
+        })
+
+      // take the user to the invalid element
+      $("#form").find(":invalid").get(0).scrollIntoView()
     }
+    if (isValid) submitForm()
   }
+
+  async function submitForm() {
+    disableSubmitButton()
+    const formData = await prepareFormData()
+    if (formData == null) return
+
+    $("#form-submit-button").html(`<span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+      <span role="status">Uploading files...</span>`)
+    google.script.run
+      .withSuccessHandler(onFormSubmissionSuccess)
+      .withFailureHandler(onFormSubmissionFailure)
+      .registerSubmission(formData)
+  }
+
+  async function prepareFormData() {
+    const formData = {
+      hearAbout: $("[name=formHearAbout]").val(),
+      haveWorked: $("[name=formHaveWorked]:checked").val() === "yes",
+      whereReside: $("[name=formWhereReside]").val(),
+      givenName: $("[name=formGivenName]").val().trim(),
+      middleName: $("[name=formMiddleName]").val().trim(),
+      familyName: $("[name=formFamilyName]").val().trim(),
+      email: $("[name=formEmail]").val().trim(),
+      phoneNumber: $("[name=formPhoneNumber]").val().replace(/\s/g, ""),
+      dob: $("[name=formDob]").val(),
+      addressLine1: $("[name=formAddressLine1]").val().trim(),
+      addressLine2: $("[name=formAddressLine2]").val().trim(),
+      addressCity: $("[name=formCity]").val().trim(),
+      addressState: $("[name=formState]").val(),
+      coverLetter: $("[name=formCoverLetter]").val(),
+      conflictingInterests: $("[name=formConflictingInterests]:checked").val() === "yes",
+      employedRelatives: $("[name=formEmployedRelatives]:checked").val() === "yes",
+      canRelocate: $("[name=formCanRelocate]:checked").val() === "yes",
+      highestEducation: $("[name=formHighestEducation]").val(),
+      whyGood: $("[name=formWhyGood]").val()
+    }
+    if (formData.phoneNumber.length == 10) formData.phoneNumber = "0" + formData.phoneNumber
+
+    const resume = $("#formResume")[0].files[0] // resume
+    const additionalDocs = $("#formAdditionalDocs")[0].files // additional docs
+
+    try {
+      formData.resume = await readFile(resume)
+      formData.additionalDocs = await Promise.all(Array.from(additionalDocs).map((doc) => readFile(doc)))
+    } catch (error) {
+      console.error(error)
+      bootstrap.Toast.getOrCreateInstance($("#file-read-error")[0]).show()
+      reinstateSubmitButton()
+      return null
+    }
+
+    console.log(formData)
+    return formData
+  }
+
+  async function readFile(file) {
+    const reader = new FileReader()
+    return new Promise((resolve, reject) => {
+      reader.onerror = (event) => reject(event.target.error)
+      reader.onload = (event) => resolve(event.target.result)
+      reader.readAsDataURL(file)
+    })
+  }
+
+  function disableSubmitButton() {
+    const submitButton = $("#form-submit-button")
+    submitButton.attr("disabled", function (_, attr) {
+      return !attr
+    })
+    submitButton.html(`<span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+      <span role="status">Checking files...</span>`)
+  }
+
+  function reinstateSubmitButton() {
+    const submitButton = $("#form-submit-button")
+    submitButton.text("Submit")
+    submitButton.attr("disabled", function (_, attr) {
+      return !attr
+    })
+  }
+
+  function onFormSubmissionSuccess(returnValue) {
+    if (returnValue) {
+      bootstrap.Toast.getOrCreateInstance($("#submission-success")[0]).show()
+      showFormSuccess()
+    } else onFormSubmissionFailure(new Error("An unknown failure occured"))
+  }
+
+  function onFormSubmissionFailure(error) {
+    console.error(error)
+    bootstrap.Toast.getOrCreateInstance($("#submission-failure")[0]).show()
+    reinstateSubmitButton()
+  }
+
+  $(document).ready(function () {
+    $.validator.addMethod(
+      "eachFileLessThan10Mb",
+      function (value, element) {
+        if (this.optional(element)) return true
+
+        if ($(element).attr("type") === "file" && element.files && element.files.length)
+          for (const file of element.files) if (file.size > 1024 * 1024 * 10) return false
+
+        return true
+      },
+      "File exceeds the 10MB limit."
+    )
+    $.validator.addMethod(
+      "maxFiles",
+      function (value, element, param) {
+        return (
+          this.optional(element) ||
+          ($(element).attr("type") === "file" && element.files && element.files.length <= param)
+        )
+      },
+      $.validator.format("Uploads of up to {0} items are allowed.")
+    )
+
+    $("#form").validate({
+      onsubmit: false,
+      onfocusout: false,
+      onkeyup: false,
+      onclick: false,
+      errorPlacement: function (error, element) {}
+    })
+
+    $("#formResume").rules("add", {
+      accept: SEMANTIC_FILE_TYPES.document,
+      eachFileLessThan10Mb: true
+    })
+    $("#formResume")
+      .attr("accept", SEMANTIC_FILE_TYPES.document)
+      .on("change", function (event) {
+        $(this)
+          .get(0)
+          .setCustomValidity($(this).valid() ? "" : "Please upload a valid resume.")
+      })
+
+    $("#formAdditionalDocs").rules("add", {
+      maxFiles: 5,
+      eachFileLessThan10Mb: true
+    })
+    $("#formAdditionalDocs").on("change", function (event) {
+      $(this)
+        .get(0)
+        .setCustomValidity($(this).valid() ? "" : "Please ensure all your documents are valid.")
+    })
+  })
 
   function toggleFormBody() {
     $("#form-introduction").toggleClass("d-none")
@@ -29,59 +179,14 @@
     $("#form-prev-button").toggleClass("d-none")
     $("#form-next-button").toggleClass("d-none")
     $("#form-submit-button").toggleClass("d-none")
+    $("#form-card").get(0).scrollIntoView()
   }
 
-  $(document).ready(function () {
-    $("#form-submit-button").on("click", function (event) {
-      const form = $("#form")
-      const isValid = form.get(0).checkValidity()
-
-      if (!isValid) {
-        event.preventDefault()
-        event.stopPropagation()
-      }
-      form.find(":invalid").addClass("is-invalid")
-      if (isValid) submitForm()
-    })
-
-    $("#form")
-      .find(":invalid")
-      .one("input", function (event) {
-        $(`[name="${$(this).attr("name")}"]`).removeClass("is-invalid")
-      })
-  })
-
-  function submitForm() {}
-
-  /*
-  function submitForm() {
-    var files = $("#files")[0].files
-
-    if (files.length === 0) {
-      showError("Please select a file to upload")
-      return
-    }
-
-    file = files[0]
-
-    if (file.size > 1024 * 1024 * 5) {
-      showError(
-        "The file size should be < 5 MB. Please <a href='http://www.labnol.org/internet/file-upload-google-forms/29170/' target='_blank'>upgrade to premium</a> for receiving larger files in Google Drive",
-      )
-      return
-    }
-
-    showMessage("Uploading file..")
-
-    reader.readAsDataURL(file)
+  function showFormSuccess() {
+    $("#form-body").addClass("d-none")
+    $("#form-success").removeClass("d-none")
+    $("#form-actions-container").addClass("d-none")
+    $("#form-heading h3").addClass("text-success-emphasis").text("Application Received")
+    $("#content-root").get(0).scrollIntoView()
   }
-
-  function showError(e) {
-    $("#progress").addClass("red-text").html(e)
-  }
-
-  function showMessage(e) {
-    $("#progress").removeClass("red-text").html(e)
-  }
-  */
 </script>

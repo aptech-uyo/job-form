@@ -4,5 +4,6 @@
   "bracketSpacing": true,
   "bracketSameLine": true,
   "semi": false,
-  "endOfLine": "auto"
+  "endOfLine": "auto",
+  "trailingComma": "none"
 }

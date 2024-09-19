@@ -1,37 +1,33 @@
+import { FormData } from "./model"
+import { fillSpreadsheetDetails, fillSpreadsheetOverview, saveFiles } from "./persist-form-entry"
+
 export function doGet(_e: GoogleAppsScript.Events.DoGet): GoogleAppsScript.HTML.HtmlOutput {
   // form.html
-  return HtmlService.createTemplateFromFile("form").evaluate()
+  return HtmlService.createTemplateFromFile("form")
+    .evaluate()
+    .addMetaTag("viewport", "width=device-width, initial-scale=1")
 }
 
 export function include(fileName: string): string {
   return HtmlService.createHtmlOutputFromFile(fileName).getContent()
 }
 
-export function uploadFileToGoogleDrive(
-  base64Data: string,
-  fileName: string,
-  name: string,
-  email: string,
-): string {
+export function registerSubmission(data: FormData): boolean {
   try {
-    const dropbox = "Graduate Management Trainee (Sep 2024) [Resumes]"
-    const folders = DriveApp.getFoldersByName(dropbox)
+    const files = saveFiles(data)
 
-    let folder
-    if (folders.hasNext()) {
-      folder = folders.next()
-    } else {
-      folder = DriveApp.createFolder(dropbox)
-    }
-
-    const contentType = base64Data.substring(5, base64Data.indexOf(";"))
-    const bytes = Utilities.base64Decode(base64Data.substr(base64Data.indexOf("base64,") + 7))
-    const blob = Utilities.newBlob(bytes, contentType, fileName)
-
-    folder.createFolder([name, email].join(" ")).createFile(blob)
-
-    return "OK"
-  } catch (f) {
-    return f?.toString() ?? ""
+    return fillSpreadsheetDetails(data, files) && fillSpreadsheetOverview(data)
+  } catch (error) {
+    Logger.log(`Error caused by user ${data.givenName} ${data.familyName}, ${data.email}`)
+    Logger.log(error)
+    throw new Error((error as Error)?.message ?? "Internal server error")
   }
+}
+
+export function getLogoBase64(): string {
+  const logoDriveId = process.env.BRAND_LOGO_DRIVE_ID
+  if (logoDriveId == null) throw new Error("Could not find company logo in Drive")
+
+  const logo = DriveApp.getFileById(logoDriveId)
+  return Utilities.base64Encode(logo.getBlob().getBytes())
 }

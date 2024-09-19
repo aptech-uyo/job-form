@@ -1,0 +1,68 @@
+<script>
+  /*!
+   * Color mode toggler for Bootstrap's docs (https://getbootstrap.com/)
+   * Copyright 2011-2024 The Bootstrap Authors
+   * Licensed under the Creative Commons Attribution 3.0 Unported License.
+   */
+
+  ;(() => {
+    "use strict"
+
+    const getStoredTheme = () => localStorage.getItem("theme")
+    const setStoredTheme = (theme) => localStorage.setItem("theme", theme)
+
+    const getPreferredTheme = () => {
+      const storedTheme = getStoredTheme()
+      if (storedTheme) {
+        return storedTheme
+      }
+
+      return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
+    }
+
+    const setTheme = (theme) => {
+      document.documentElement.setAttribute("data-bs-theme", theme)
+    }
+
+    setTheme(getPreferredTheme())
+
+    const showActiveTheme = (theme) => {
+      const themeSwitcher = $("#bd-theme")
+      if (!themeSwitcher.length) return
+
+      const themeBeingDisplayed = themeSwitcher.attr("data-bs-theme-value")
+      if (theme === themeBeingDisplayed) return
+
+      themeSwitcher.attr("data-bs-theme-value", theme)
+      $(".theme-icon-active").toggleClass("bi-sun-fill").toggleClass("bi-moon-stars-fill")
+
+      const themeSwitcherLabel = `${$("#bd-theme-text").text()} (${theme})`
+      themeSwitcher.attr("aria-label", themeSwitcherLabel)
+
+      // some stubborn elements
+      if (!$("#form-prev-button").hasClass(`btn-${theme}`))
+        $("#form-actions-container")
+          .find(".text-primary-emphasis")
+          .toggleClass("btn-light")
+          .toggleClass("btn-dark")
+    }
+
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
+      const storedTheme = getStoredTheme()
+      if (storedTheme !== "light" && storedTheme !== "dark") {
+        setTheme(getPreferredTheme())
+      }
+    })
+
+    window.addEventListener("DOMContentLoaded", () => {
+      showActiveTheme(getPreferredTheme())
+
+      $("#bd-theme").on("click", function () {
+        const theme = $(this).attr("data-bs-theme-value") == "light" ? "dark" : "light"
+        setStoredTheme(theme)
+        setTheme(theme)
+        showActiveTheme(theme)
+      })
+    })
+  })()
+</script>

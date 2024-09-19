@@ -11,9 +11,9 @@
     "skipLibCheck": true, // consider toggling if you need to investigate errors coming from within a package
     "outDir": "build",
     "lib": ["ESNext", "DOM"],
-    "types": ["google-apps-script"]
+    "types": ["node", "google-apps-script"]
   },
-  "include": ["src"],
+  "include": ["src/*", "src/**/*"],
   "exclude": ["node_modules"],
   "files": ["src/index.ts"]
 }
