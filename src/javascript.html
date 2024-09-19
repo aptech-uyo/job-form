@@ -107,7 +107,7 @@
   function onFormSubmissionSuccess(returnValue) {
     if (returnValue) {
       bootstrap.Toast.getOrCreateInstance($("#submission-success")[0]).show()
-      reinstateSubmitButton() // TODO: show success page
+      showFormSuccess()
     } else onFormSubmissionFailure(new Error("An unknown failure occured"))
   }
 
@@ -116,18 +116,6 @@
     bootstrap.Toast.getOrCreateInstance($("#submission-failure")[0]).show()
     reinstateSubmitButton()
   }
-
-  /*
-
-  function showSuccess(e) {
-    if (e === "OK") {
-      $("#forminner").hide()
-      $("#success").show()
-    } else {
-      showError(e)
-    }
-  }
-    */
 
   $(document).ready(function () {
     $.validator.addMethod(
@@ -192,5 +180,13 @@
     $("#form-next-button").toggleClass("d-none")
     $("#form-submit-button").toggleClass("d-none")
     $("#form-card").get(0).scrollIntoView()
+  }
+
+  function showFormSuccess() {
+    $("#form-body").addClass("d-none")
+    $("#form-success").removeClass("d-none")
+    $("#form-actions-container").addClass("d-none")
+    $("#form h3").addClass("text-success-emphasis").text("Application Received")
+    $("#content-root").get(0).scrollIntoView()
   }
 </script>
