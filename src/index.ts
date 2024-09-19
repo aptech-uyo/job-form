@@ -23,3 +23,11 @@ export function registerSubmission(data: FormData): boolean {
     throw new Error((error as Error)?.message ?? "Internal server error")
   }
 }
+
+export function getLogoBase64(): string {
+  const logoDriveId = process.env.BRAND_LOGO_DRIVE_ID
+  if (logoDriveId == null) throw new Error("Could not find company logo in Drive")
+
+  const logo = DriveApp.getFileById(logoDriveId)
+  return Utilities.base64Encode(logo.getBlob().getBytes())
+}

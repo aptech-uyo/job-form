@@ -27,7 +27,16 @@
 
         <div id="form-card" class="col col-md-9 col-lg-8 col-xl-6 p-5 m-3 card bg-body">
           <form id="form" novalidate="novalidate" autocomplete="on">
-            <h3>Graduate Management Trainee, Solution Tech Limited</h3>
+            <div
+              id="form-heading"
+              class="d-flex flex-column flex-md-row align-items-start align-items-md-center">
+              <img
+                id="company-logo"
+                class="w-auto"
+                src="data:image/png;base64,<?= getLogoBase64() ?>"
+                alt="Solution Tech logo" />
+              <h3 class="ms-1">Graduate Management Trainee, Solution Tech Limited</h3>
+            </div>
 
             <div id="form-introduction" class="mt-5">
               <p>
@@ -533,14 +542,14 @@
           <button
             id="form-prev-button"
             type="button"
-            class="btn btn-light btn-lg text-primary-emphasis fw-semibold shadow-sm d-none"
+            class="btn btn-light btn-lg text-primary-emphasis fw-normal shadow-sm d-none"
             onclick="toggleFormBody();">
             Previous
           </button>
           <button
             id="form-next-button"
             type="button"
-            class="btn btn-light btn-lg text-primary-emphasis fw-semibold shadow-sm"
+            class="btn btn-light btn-lg text-primary-emphasis fw-normal shadow-sm"
             onclick="toggleFormBody();">
             Next
           </button>
@@ -548,7 +557,7 @@
             id="form-submit-button"
             form="form"
             type="submit"
-            class="btn btn-primary btn-lg fw-semibold shadow-sm d-none"
+            class="btn btn-primary btn-lg fw-normal shadow-sm d-none"
             onclick="validateForm(); return false;">
             Submit
           </button>
