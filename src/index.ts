@@ -1,10 +1,13 @@
 import { FormData } from "./model"
+
 import { fillSpreadsheetDetails, fillSpreadsheetOverview, saveFiles } from "./persist-form-entry"
 
 export function doGet(_e: GoogleAppsScript.Events.DoGet): GoogleAppsScript.HTML.HtmlOutput {
   // form.html
   return HtmlService.createTemplateFromFile("form")
     .evaluate()
+    .setTitle("Job Application for Graduate Management Trainee, Solution Tech Limited")
+    .setFaviconUrl(process.env.LOGO_URL ?? "")
     .addMetaTag("viewport", "width=device-width, initial-scale=1")
 }
 
@@ -24,8 +27,18 @@ export function registerSubmission(data: FormData): boolean {
   }
 }
 
-export function getLogoBase64(): string {
-  const logoDriveId = process.env.BRAND_LOGO_DRIVE_ID
+export function getLogoBase64(index: number): string {
+  let logoDriveId
+  switch (index) {
+    case 1:
+      logoDriveId = process.env.BRAND_LOGO1_DRIVE_ID
+      break
+    case 2:
+      logoDriveId = process.env.BRAND_LOGO2_DRIVE_ID
+      break
+    case 3:
+      logoDriveId = process.env.BRAND_LOGO3_DRIVE_ID
+  }
   if (logoDriveId == null) throw new Error("Could not find company logo in Drive")
 
   const logo = DriveApp.getFileById(logoDriveId)

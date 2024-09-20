@@ -26,7 +26,10 @@ module.exports = {
         { from: "src/*.html", to: "[name][ext]" }
       ]
     }),
-    new Dotenv()
+    new Dotenv({
+      safe: true,
+      allowEmptyValues: true
+    })
   ],
   devtool: false
 }

@@ -2,8 +2,6 @@
 <html lang="en">
   <head>
     <base target="_blank" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Job Application for Graduate Management Trainee, Solution Tech Limited</title>
 
     <!-- color-mode.html -->
     <?!= include('color-mode'); ?>
@@ -20,23 +18,22 @@
   <body class="p-0 pb-5 m-0">
     <div id="content-root" class="container-fluid m-0">
       <div id="centered-content-container" class="pt-5 row d-flex justify-content-center">
-        <div id="logo-container" class="col col-md-9 col-lg-8 col-xl-6"></div>
-
-        <!-- Force next columns to break to new line -->
-        <div class="w-100 d-block"></div>
-
         <div id="form-card" class="col col-md-9 col-lg-8 col-xl-6 p-5 m-3 card bg-body">
           <form id="form" novalidate="novalidate" autocomplete="on">
             <div
-              id="form-heading"
-              class="d-flex flex-column flex-md-row align-items-start align-items-md-center">
+              id="form-logos"
+              class="d-flex align-items-center justify-content-between"
+              style="height: 65px">
               <img
-                id="company-logo"
-                class="w-auto"
-                src="data:image/png;base64,<?= getLogoBase64() ?>"
+                class="mh-100 w-auto"
+                src="data:image/png;base64,<?= getLogoBase64(1) ?>"
                 alt="Solution Tech logo" />
-              <h3 class="ms-1">Graduate Management Trainee, Solution Tech Limited</h3>
+              <img
+                class="mh-100 w-auto"
+                src="data:image/png;base64,<?= getLogoBase64(2) ?>"
+                alt="Aptech logo" />
             </div>
+            <h3 id="form-heading">Graduate Management Trainee, Solution Tech Limited</h3>
 
             <div id="form-introduction" class="mt-5">
               <p>
@@ -538,6 +535,7 @@
           </form>
         </div>
 
+        <!-- Force next columns to break to new line -->
         <div class="w-100 d-block"></div>
 
         <div
