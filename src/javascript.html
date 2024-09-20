@@ -2,7 +2,7 @@
   // https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
   const SEMANTIC_FILE_TYPES = {
     document:
-      "application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/msword,application/vnd.oasis.opendocument.text,application/rtf"
+      "application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/msword,application/vnd.google-apps.document,application/vnd.oasis.opendocument.text,application/rtf"
   }
   const FORM_STORAGE_KEY = "formData"
 
@@ -31,7 +31,7 @@
     if (formData == null) return
 
     $("#form-submit-button").html(`<span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
-      <span role="status">Uploading files...</span>`)
+      <span role="status">Submitting...</span>`)
     google.script.run
       .withSuccessHandler(onFormSubmissionSuccess)
       .withFailureHandler(onFormSubmissionFailure)
