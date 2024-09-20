@@ -30,29 +30,6 @@
   }
 </style>
 
-<script>
-  // Ensure the image height matches the h3 height
-  window.onload = function () {
-    const h3 = document.querySelector("#form-heading h3")
-    const img = document.getElementById("company-logo")
-
-    // Get the computed height of the h3 element
-    const h3Height = h3.clientHeight
-
-    // Apply that height to the image while maintaining aspect ratio
-    img.style.height = h3Height + "px"
-  }
-
-  // Reapply the height when the window is resized to keep things responsive
-  window.onresize = function () {
-    const h3 = document.querySelector("#form-heading h3")
-    const img = document.getElementById("company-logo")
-
-    const h3Height = h3.clientHeight
-    img.style.height = h3Height + "px"
-  }
-</script>
-
 <!--style>
   /* Override Bootstrap colors with Microsoft Fluent UI theme colors */
   :root {

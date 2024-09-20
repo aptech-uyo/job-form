@@ -2,8 +2,9 @@
   // https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
   const SEMANTIC_FILE_TYPES = {
     document:
-      "application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/msword,application/vnd.oasis.opendocument.text,application/rtf"
+      "application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/msword,application/vnd.google-apps.document,application/vnd.oasis.opendocument.text,application/rtf"
   }
+  const FORM_STORAGE_KEY = "formData"
 
   function validateForm() {
     const isValid = $("#form").get(0).checkValidity()
@@ -30,7 +31,7 @@
     if (formData == null) return
 
     $("#form-submit-button").html(`<span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
-      <span role="status">Uploading files...</span>`)
+      <span role="status">Submitting...</span>`)
     google.script.run
       .withSuccessHandler(onFormSubmissionSuccess)
       .withFailureHandler(onFormSubmissionFailure)
@@ -52,12 +53,12 @@
       addressLine2: $("[name=formAddressLine2]").val().trim(),
       addressCity: $("[name=formCity]").val().trim(),
       addressState: $("[name=formState]").val(),
-      coverLetter: $("[name=formCoverLetter]").val(),
+      coverLetter: $("[name=formCoverLetter]").val(), // do not trim
       conflictingInterests: $("[name=formConflictingInterests]:checked").val() === "yes",
       employedRelatives: $("[name=formEmployedRelatives]:checked").val() === "yes",
       canRelocate: $("[name=formCanRelocate]:checked").val() === "yes",
       highestEducation: $("[name=formHighestEducation]").val(),
-      whyGood: $("[name=formWhyGood]").val()
+      whyGood: $("[name=formWhyGood]").val() // do not trim
     }
     if (formData.phoneNumber.length == 10) formData.phoneNumber = "0" + formData.phoneNumber
 
@@ -74,7 +75,7 @@
       return null
     }
 
-    console.log(formData)
+    // console.log(formData)
     return formData
   }
 
@@ -108,6 +109,7 @@
     if (returnValue) {
       bootstrap.Toast.getOrCreateInstance($("#submission-success")[0]).show()
       showFormSuccess()
+      window.localStorage.removeItem(FORM_STORAGE_KEY)
     } else onFormSubmissionFailure(new Error("An unknown failure occured"))
   }
 
@@ -170,6 +172,39 @@
         .get(0)
         .setCustomValidity($(this).valid() ? "" : "Please ensure all your documents are valid.")
     })
+
+    // autofill form
+    $("#formHearAbout").val("<?= formHearAbout ?>")
+    if (storageSupported()) {
+      let formData = window.localStorage.getItem(FORM_STORAGE_KEY)
+      formData = formData == null ? {} : JSON.parse(formData)
+
+      for (field of Object.keys(formData)) {
+        const element = $(`[name=${field}]`)
+        if (element.get(0).type === "radio")
+          element.filter(`[value=${formData[field]}]`).prop("checked", true)
+        else element.val(formData[field])
+      }
+    }
+
+    // cache data as user fills the form
+    if (storageSupported()) {
+      $("#form select, #form input, #form textarea")
+        .not("[type=file], .feedback-anchor")
+        .on("change", function () {
+          let formData = window.localStorage.getItem(FORM_STORAGE_KEY)
+          formData = formData == null ? {} : JSON.parse(formData)
+
+          const fieldName = $(this).attr("name")
+          if ($(this).attr("type") === "radio") {
+            formData[fieldName] = $(`[name=${fieldName}]:checked`).val()
+          } else {
+            formData[fieldName] = $(this).val()
+          }
+
+          window.localStorage.setItem(FORM_STORAGE_KEY, JSON.stringify(formData))
+        })
+    }
   })
 
   function toggleFormBody() {
@@ -186,7 +221,15 @@
     $("#form-body").addClass("d-none")
     $("#form-success").removeClass("d-none")
     $("#form-actions-container").addClass("d-none")
-    $("#form-heading h3").addClass("text-success-emphasis").text("Application Received")
+    $("#form-heading").addClass("text-success-emphasis").text("Application Received")
     $("#content-root").get(0).scrollIntoView()
+  }
+
+  function storageSupported() {
+    try {
+      return "localStorage" in window && window["localStorage"] != null
+    } catch (e) {
+      return false
+    }
   }
 </script>
