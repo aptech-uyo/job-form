@@ -1,11 +1,5 @@
-import { FormData } from "./model"
-import { fillSpreadsheetDetails, fillSpreadsheetOverview, saveFiles } from "./persist-form-entry"
-
-export let formHearAbout: string
-
-export function doGet(e: GoogleAppsScript.Events.DoGet): GoogleAppsScript.HTML.HtmlOutput {
+export function doGet(): GoogleAppsScript.HTML.HtmlOutput {
   // form.html
-  formHearAbout = e.parameter.formHearAbout
   return HtmlService.createTemplateFromFile("form")
     .evaluate()
     .setTitle("Job Application for Graduate Management Trainee, Solution Tech Limited")
@@ -15,20 +9,7 @@ export function doGet(e: GoogleAppsScript.Events.DoGet): GoogleAppsScript.HTML.H
 
 export function include(fileName: string): string {
   const template = HtmlService.createTemplateFromFile(fileName)
-  if (fileName.startsWith("javascript")) template.formHearAbout = formHearAbout
   return template.evaluate().getContent()
-}
-
-export function registerSubmission(data: FormData): boolean {
-  try {
-    const files = saveFiles(data)
-
-    return fillSpreadsheetDetails(data, files) && fillSpreadsheetOverview(data)
-  } catch (error) {
-    Logger.log(`Error caused by user ${data.givenName} ${data.familyName}, ${data.email}`)
-    Logger.log(error)
-    throw new Error((error as Error)?.message ?? "Internal server error")
-  }
 }
 
 export function getLogoBase64(index: number): string {

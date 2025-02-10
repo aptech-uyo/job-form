@@ -38,13 +38,6 @@
 
       const themeSwitcherLabel = `${$("#bd-theme-text").text()} (${theme})`
       themeSwitcher.attr("aria-label", themeSwitcherLabel)
-
-      // some stubborn elements
-      if (!$("#form-prev-button").hasClass(`btn-${theme}`))
-        $("#form-actions-container")
-          .find(".text-primary-emphasis")
-          .toggleClass("btn-light")
-          .toggleClass("btn-dark")
     }
 
     window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
